@@ -121,7 +121,12 @@ public class ContatoDAO {
 
 	public void editarContato(Contato contato) {
 		
-		String sql = "UPDATE contatos SET nome = ?, idade = ?, datacadastro = ? " + " where id = ?";
+		String sql = "UPDATE contatos"
+				+ " SET"
+				+ " nome = ?,"
+				+ " idade = ?,"
+				+ " datacadastro = ? " +
+				  " where id = ?";
 		
 		Connection conx = null;
 		PreparedStatement pstm = null;
