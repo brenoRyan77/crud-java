@@ -2,6 +2,12 @@ package br.com.contatos.factory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.mysql.jdbc.PreparedStatement;
+
+import br.com.contatos.Exceptions.DbExceptions;
 
 public class ConnectionFactory {
 
@@ -14,6 +20,8 @@ public class ConnectionFactory {
 	//Caminho do banco de dados
 	private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/agenda";
 	
+	private static Connection conx = null;
+	
 	
 	/*
 	 * Conexão com o banco
@@ -23,7 +31,7 @@ public class ConnectionFactory {
 		Class.forName("com.mysql.jdbc.Driver");
 		
 		//Cria conexão com o banco
-		Connection conx = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
+		conx = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
 		
 		return conx;
 	}
@@ -31,7 +39,7 @@ public class ConnectionFactory {
 	public static void main(String[] args) throws Exception {
 		
 		//Recuperar uma conexão com o banco
-		Connection conx = criandoConexaoBanco();
+		conx = criandoConexaoBanco();
 		
 		//Testar se conexão é null
 		if(conx != null) {
@@ -40,4 +48,36 @@ public class ConnectionFactory {
 		}
 	}
 	
+	public static void fecharConexao(Connection conx) {
+		
+		if(conx != null) {
+			try {
+				conx.close();
+			}catch(SQLException e) {
+				throw new DbExceptions(e.getMessage());
+			}
+		}
+	}
+	
+	public static void fecherResultSet(ResultSet rs) {
+		
+		if(rs != null) {
+			try{
+				rs.close();
+			}catch(SQLException e) {
+				throw new DbExceptions(e.getMessage());
+			}
+		}
+	}
+	
+	public static void fecharStatement(PreparedStatement st) {
+		
+		if(st != null) {
+			try {
+				st.close();
+			}catch(SQLException e) {
+				throw new DbExceptions(e.getMessage());
+			}
+		}
+	}
 }
